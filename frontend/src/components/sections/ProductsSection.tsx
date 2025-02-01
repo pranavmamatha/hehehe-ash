@@ -3,7 +3,6 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 import Link from "next/link";
-import { Badge } from "@/components/ui/badge";
 
 interface Product {
     id: string;
@@ -80,26 +79,24 @@ const ProductsSection = () => {
                                     {product.technologies.length > 0 && (
                                         <div className="flex flex-wrap gap-2">
                                             {product.technologies.map((tech, index) => (
-                                                <Badge 
+                                                <span 
                                                     key={index}
-                                                    variant="secondary"
-                                                    className="px-2.5 py-0.5"
+                                                    className="text-sm px-2.5 py-0.5 rounded-full bg-secondary text-secondary-foreground"
                                                 >
                                                     {tech}
-                                                </Badge>
+                                                </span>
                                             ))}
                                         </div>
                                     )}
                                     {product.tags.length > 0 && (
                                         <div className="flex flex-wrap gap-2">
                                             {product.tags.map((tag, index) => (
-                                                <Badge 
+                                                <span 
                                                     key={index}
-                                                    variant="outline"
-                                                    className="px-2.5 py-0.5"
+                                                    className="text-sm px-2.5 py-0.5 rounded-full bg-background border text-foreground"
                                                 >
                                                     {tag}
-                                                </Badge>
+                                                </span>
                                             ))}
                                         </div>
                                     )}

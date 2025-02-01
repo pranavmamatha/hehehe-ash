@@ -55,7 +55,7 @@ const Page = () => {
       });
       
       if (response.ok) {
-        router.push('/');
+        router.push('/dashboard');
       } else {
         const data = await response.json();
         setError(data.message || 'Failed to create product');
@@ -171,7 +171,7 @@ const Page = () => {
               <Button 
                 type="button" 
                 variant="outline" 
-                onClick={() => router.push('/')}
+                onClick={() => router.push('/dashboard')}
               >
                 Cancel
               </Button>

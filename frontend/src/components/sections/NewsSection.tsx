@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import { Card, CardHeader, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
+import { useRouter } from "next/navigation";
 
 interface NewsItem {
   id: string;
@@ -13,6 +14,7 @@ interface NewsItem {
 }
 
 const NewsSection = () => {
+    const router = useRouter();
     const [news, setNews] = useState<NewsItem[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<Error | null>(null);
@@ -87,6 +89,10 @@ const NewsSection = () => {
         item.title.toLowerCase().includes(searchQuery.toLowerCase())
     );
 
+    const handleNewsClick = (newsId: string) => {
+        router.push(`/news/${newsId}`);
+    };
+
     return (
         <div className="h-full flex flex-col">
             <h2 className="text-2xl font-semibold mb-4">Latest News</h2>
@@ -121,10 +127,11 @@ const NewsSection = () => {
                             filteredNews.map((item) => (
                                 <div 
                                     key={item.id}
+                                    onClick={() => handleNewsClick(item.id)}
                                     className="p-4 rounded-lg border bg-background hover:bg-accent transition-colors cursor-pointer"
                                 >
                                     <h3 className="font-medium">{item.title}</h3>
-                                    <p className="text-sm text-muted-foreground mt-2">
+                                    <p className="text-sm text-muted-foreground mt-2 line-clamp-2">
                                         {item.description}
                                     </p>
                                     <div className="flex items-center gap-2 mt-3 text-xs text-muted-foreground">

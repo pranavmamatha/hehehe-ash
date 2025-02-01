@@ -1,9 +1,9 @@
-export default () => {
+import NewsSection from "@/components/sections/NewsSection"
+
+export default function NewsPage() {
     return (
-        <div className="grid place-item-center">
-            <div className="text-2xl font-bold">
-            welcome to news letter
-            </div>
+        <div className="container mx-auto px-4 py-8">
+            <NewsSection />
         </div>
     )
 }
