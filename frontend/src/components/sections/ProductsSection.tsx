@@ -1,13 +1,14 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 import { Button } from "@/components/ui/button";
 import { Card, CardHeader, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { redirect } from 'next/navigation';
 
 export default function ProductsSection() {
+  const router = useRouter();
   const [products, setProducts] = useState([]);
   const [newProduct, setNewProduct] = useState({
     name: '',
@@ -31,8 +32,8 @@ export default function ProductsSection() {
     }
   };
 
-  const handleCreateProduct = async () => {
-    redirect('/add-product');
+  const handleCreateProduct = () => {
+    router.push('/add-product');
   };
 
   useEffect(() => {
@@ -42,14 +43,14 @@ export default function ProductsSection() {
   return (
     <div className="space-y-6">
       <div className='flex justify-between text-2xl font-bold'>
-      Products Section
-      <Button onClick={handleCreateProduct}>
-        + New Product
-      </Button>
+        Products Section
+        <Button onClick={handleCreateProduct}>
+          + New Product
+        </Button>
       </div>
       <div className="grid grid-cols-1 gap-1">
         {products?.map((product: any) => (
-          <Card key={product.id}>
+          <Card key={product._id || product.id}>
             <CardHeader className='text-2xl font-semibold'>{product.name}</CardHeader>
             <CardContent>
               <p>{product.description}</p>
