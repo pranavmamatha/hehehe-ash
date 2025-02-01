@@ -3,6 +3,9 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 import Link from "next/link";
+import { useRouter } from 'next/navigation';
+import { Code as CodeIcon, Tag as TagIcon } from 'lucide-react';
+import { Badge } from "@/components/ui/badge";
 
 interface Product {
     id: string;
@@ -10,12 +13,14 @@ interface Product {
     description: string;
     technologies: string[];
     tags: string[];
+    status?: 'safe' | 'warning' | 'danger';
 }
 
 const ProductsSection = () => {
     const [products, setProducts] = useState<Product[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<Error | null>(null);
+    const router = useRouter();
 
     const fetchProducts = async () => {
         try {
@@ -31,7 +36,8 @@ const ProductsSection = () => {
                 name: item.name,
                 description: item.description,
                 technologies: item.technologies || [],
-                tags: item.tags || []
+                tags: item.tags || [],
+                status: item.status || 'safe'
             }));
             
             setProducts(transformedProducts);
@@ -46,6 +52,10 @@ const ProductsSection = () => {
     useEffect(() => {
         fetchProducts();
     }, []);
+
+    const handleProductClick = (productId: string) => {
+        router.push(`/products/${productId}`);
+    };
 
     if (loading) return <div>Loading...</div>;
     if (error) return <div className="text-red-500">{error.message}</div>;
@@ -62,44 +72,73 @@ const ProductsSection = () => {
                 </Link>
             </div>
             
-            {/* Scrollable Products Container */}
             <div className="flex-1 overflow-y-auto pr-2 scrollbar-hide min-h-0">
                 <div className="space-y-4">
                     {products.length > 0 ? (
                         products.map((product) => (
                             <div 
                                 key={product.id} 
-                                className="p-4 rounded-lg border bg-background hover:bg-accent transition-colors cursor-pointer"
+                                className="p-6 rounded-lg border bg-background hover:bg-accent transition-colors cursor-pointer relative"
+                                onClick={() => handleProductClick(product.id)}
                             >
-                                <h3 className="text-lg font-medium mb-2">{product.name}</h3>
-                                <p className="text-sm text-muted-foreground mb-3">
-                                    {product.description}
-                                </p>
-                                <div className="space-y-2">
-                                    {product.technologies.length > 0 && (
+                                {/* Status Indicator */}
+                                <div className="absolute top-4 right-4">
+                                    <div 
+                                        className={`h-3 w-3 rounded-full ${
+                                            product.status === 'safe' ? 'bg-green-500' :
+                                            product.status === 'warning' ? 'bg-yellow-500' :
+                                            'bg-red-500'
+                                        }`}
+                                    />
+                                </div>
+
+                                {/* Title and Description */}
+                                <div className="mb-4 pr-8">
+                                    <h3 className="text-xl font-semibold mb-2">{product.name}</h3>
+                                    <p className="text-muted-foreground">
+                                        {product.description}
+                                    </p>
+                                </div>
+
+                                {/* Technologies and Tags */}
+                                <div className="space-y-3">
+                                    {/* Technologies */}
+                                    <div>
+                                        <h4 className="text-sm font-medium text-muted-foreground mb-2 flex items-center gap-2">
+                                            <CodeIcon className="h-4 w-4" />
+                                            Technologies
+                                        </h4>
                                         <div className="flex flex-wrap gap-2">
                                             {product.technologies.map((tech, index) => (
-                                                <span 
+                                                <Badge 
                                                     key={index}
-                                                    className="text-sm px-2.5 py-0.5 rounded-full bg-secondary text-secondary-foreground"
+                                                    variant="secondary"
+                                                    className="text-xs"
                                                 >
                                                     {tech}
-                                                </span>
+                                                </Badge>
                                             ))}
                                         </div>
-                                    )}
-                                    {product.tags.length > 0 && (
+                                    </div>
+
+                                    {/* Tags */}
+                                    <div>
+                                        <h4 className="text-sm font-medium text-muted-foreground mb-2 flex items-center gap-2">
+                                            <TagIcon className="h-4 w-4" />
+                                            Tags
+                                        </h4>
                                         <div className="flex flex-wrap gap-2">
                                             {product.tags.map((tag, index) => (
-                                                <span 
+                                                <Badge 
                                                     key={index}
-                                                    className="text-sm px-2.5 py-0.5 rounded-full bg-background border text-foreground"
+                                                    variant="outline"
+                                                    className="text-xs"
                                                 >
                                                     {tag}
-                                                </span>
+                                                </Badge>
                                             ))}
                                         </div>
-                                    )}
+                                    </div>
                                 </div>
                             </div>
                         ))

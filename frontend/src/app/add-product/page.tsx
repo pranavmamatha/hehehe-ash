@@ -8,6 +8,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
 import { AlertCircle, X } from 'lucide-react';
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 
 const Page = () => {
   const router = useRouter();
@@ -15,7 +16,8 @@ const Page = () => {
     name: '',
     description: '',
     technologies: '',
-    tags: ''
+    tags: '',
+    status: 'safe'
   });
   const [error, setError] = useState('');
 
@@ -165,6 +167,37 @@ const Page = () => {
                   ))}
                 </div>
               )}
+            </div>
+
+            <div className="space-y-3">
+              <label className="text-sm font-medium">Status</label>
+              <RadioGroup
+                defaultValue={product.status}
+                onValueChange={(value) => setProduct({...product, status: value})}
+                className="flex space-x-4"
+              >
+                <div className="flex items-center space-x-2">
+                  <RadioGroupItem value="safe" id="safe" />
+                  <label htmlFor="safe" className="flex items-center">
+                    <span className="h-3 w-3 rounded-full bg-green-500 mr-2" />
+                    Safe
+                  </label>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <RadioGroupItem value="warning" id="warning" />
+                  <label htmlFor="warning" className="flex items-center">
+                    <span className="h-3 w-3 rounded-full bg-yellow-500 mr-2" />
+                    Warning
+                  </label>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <RadioGroupItem value="danger" id="danger" />
+                  <label htmlFor="danger" className="flex items-center">
+                    <span className="h-3 w-3 rounded-full bg-red-500 mr-2" />
+                    Danger
+                  </label>
+                </div>
+              </RadioGroup>
             </div>
 
             <div className="flex justify-end space-x-4 pt-4">
